@@ -1,0 +1,28 @@
+#! /usr/bin/env python`
+
+import httplib
+import urllib
+key = "7HPPYPORUVBSA3QI"
+from subprocess import check_output
+
+my_ip = check_output(['hostname', '-I'])
+poz_a1 = my_ip.find('.')
+ip_1 = my_ip[0:poz_a1]
+
+poz_a2 = my_ip.find('.', poz_a1+1)
+ip_2 = my_ip[poz_a1+1 : poz_a2]
+
+poz_a3 = my_ip.find('.', poz_a2+1)
+ip_3 = my_ip[poz_a2+1 : poz_a3]
+
+poz_a4 = my_ip.find('.', poz_a3+1)
+ip_4 = my_ip[poz_a3+1 : poz_a4]
+
+print "zapisueje do thinkspeaka"
+params = urllib.urlencode({'field1': ip_1, 'field2': ip_2, 'field3': ip_3, 'field4': ip_4, 'key':key })
+headers = {"Content-typZZe": "application/x-www-form-urlencoded","Accept": "text/plain"}
+conn = httplib.HTTPConnection("api.thingspeak.com:80")
+conn.request("POST", "/update", params, headers)
+response = conn.getresponse()
+print response.status, response.reason
+conn.close()
